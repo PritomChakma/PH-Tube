@@ -7,6 +7,7 @@ function setTime(time) {
   return `${hour} Hour ${munite} munite ${remainingSecong} second ago`;
 }
 
+// ***************
 const removeActiveClass = () => {
   const buttons = document.getElementsByClassName("category-btn");
   for (const btn of buttons) {
@@ -24,6 +25,8 @@ const loadCategories = () => {
     .then((data) => DisplayCategories(data.categories))
     .catch((error) => console.log(error));
 };
+
+// *********
 const loadVideo = () => {
   // Fetch the data
   fetch("https://openapi.programming-hero.com/api/phero-tube/videos")
@@ -32,6 +35,7 @@ const loadVideo = () => {
     .catch((error) => console.log(error));
 };
 
+// **********
 const loadCategoriesVideo = (id) => {
   //   alert(id);
   fetch(`https://openapi.programming-hero.com/api/phero-tube/category/${id}`)
@@ -48,26 +52,29 @@ const loadCategoriesVideo = (id) => {
     .catch((error) => console.log(error));
 };
 
-// const cardDemo = {
-//   category_id: "1003",
-//   video_id: "aaae",
-//   thumbnail: "https://i.ibb.co/Yc4p5gD/inside-amy.jpg",
-//   title: "Inside Amy Schumer",
-//   authors: [
-//     {
-//       profile_picture: "https://i.ibb.co/YD2mqH7/amy.jpg",
-//       profile_name: "Amy Schumer",
-//       verified: "",
-//     },
-//   ],
-//   others: {
-//     views: "3.6K",
-//     posted_date: "15147",
-//   },
-//   description:
-//     "'Inside Amy Schumer' is a comedy show by the popular comedian Amy Schumer, blending sharp satire and unfiltered humor to tackle everyday issues and societal norms. With 3.6K views, the show promises a blend of hilarious sketches, thought-provoking stand-up, and candid interviews. It's a must-watch for fans of bold, edgy comedy.",
-// };
+// **********
+const loadDetails = async (videoId) => {
+  console.log(videoId);
+  const uri = `https://openapi.programming-hero.com/api/phero-tube/video/${videoId}`;
+  const res = await fetch(uri);
+  const data = await res.json();
+  displayDetais(data.video);
+};
 
+// ***************
+const displayDetais = (video) => {
+  const detalContainer = document.getElementById("modal-content");
+
+  detalContainer.innerHTML = `
+  <img src=${video.thumbnail}/>
+  <p>${video.description}</p>
+
+  `;
+  //   way-1
+  document.getElementById("showModalData").click();
+};
+
+// *******************
 const displayVideos = (videos) => {
   const videoContainer = document.getElementById("video");
   videoContainer.innerHTML = " ";
@@ -132,6 +139,14 @@ ${
     ? `<img class="w-5 h-5 object-cover" src="https://img.icons8.com/?size=96&id=D9RtvkuOe31p&format=png" />`
     : " "
 }
+
+<div>
+<p><button onclick="loadDetails('${
+      video.video_id
+    }') " class="btn btn-sm btn-error">Details</button></p>
+</div>
+
+
   </div>
     `;
     videoContainer.append(card);
