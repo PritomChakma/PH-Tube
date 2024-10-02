@@ -7,6 +7,13 @@ function setTime(time) {
   return `${hour} Hour ${munite} munite ${remainingSecong} second ago`;
 }
 
+const removeActiveClass = () => {
+  const buttons = document.getElementsByClassName("category-btn");
+  for (const btn of buttons) {
+    btn.classList.remove("active");
+  }
+};
+
 // 1 . fetch , load and show catagories on html
 
 // create loadCategories
@@ -29,7 +36,15 @@ const loadCategoriesVideo = (id) => {
   //   alert(id);
   fetch(`https://openapi.programming-hero.com/api/phero-tube/category/${id}`)
     .then((res) => res.json())
-    .then((data) => displayVideos(data.category))
+    .then((data) => {
+      const activeBtn = document.getElementById(`btn-${id}`);
+      //   remove acrive class start
+
+      removeActiveClass();
+      //   remove acrive class End
+      activeBtn.classList.add("active");
+      displayVideos(data.category);
+    })
     .catch((error) => console.log(error));
 };
 
@@ -132,7 +147,7 @@ const DisplayCategories = (categories) => {
     // create a button
     const buttonContainer = document.createElement("div");
     buttonContainer.innerHTML = `
-    <button onclick=" loadCategoriesVideo(${item.category_id})" class="btn">${item.category}</button>
+    <button id="btn-${item.category_id}" onclick=" loadCategoriesVideo(${item.category_id})" class="btn category-btn">${item.category}</button>
     `;
     // add button to categories container
     categoriesContainer.append(buttonContainer);
